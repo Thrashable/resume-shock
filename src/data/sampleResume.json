@@ -1,0 +1,55 @@
+{
+  "name": "Jane Smith",
+  "title": "Senior Software Engineer",
+  "contact": {
+    "email": "jane.smith@example.com",
+    "phone": "(555) 123-4567",
+    "linkedin": "linkedin.com/in/janesmith",
+    "github": "github.com/janesmith",
+    "website": "https://janesmith.dev"
+  },
+  "summary": "Experienced software engineer with 8+ years building scalable web applications. Passionate about clean code, developer experience, and mentoring junior engineers.",
+  "experience": [
+    {
+      "company": "TechCorp Inc.",
+      "role": "Senior Software Engineer",
+      "dateRange": "Jan 2021 - Present",
+      "bullets": [
+        "Led migration of monolithic application to microservices architecture, reducing deployment time by 60%",
+        "Designed and implemented real-time notification system serving 2M+ daily active users",
+        "Mentored team of 5 junior engineers through code reviews and pair programming sessions"
+      ]
+    },
+    {
+      "company": "StartupXYZ",
+      "role": "Full Stack Developer",
+      "dateRange": "Mar 2018 - Dec 2020",
+      "bullets": [
+        "Built customer-facing dashboard from scratch using React and Node.js",
+        "Implemented CI/CD pipeline reducing release cycle from 2 weeks to daily deployments",
+        "Optimized database queries resulting in 40% improvement in API response times"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "school": "University of California, Berkeley",
+      "degree": "B.S. Computer Science",
+      "year": "2017"
+    }
+  ],
+  "skills": ["JavaScript", "TypeScript", "React", "Node.js", "Python", "PostgreSQL", "Redis", "Docker", "Kubernetes", "AWS", "GraphQL", "REST APIs"],
+  "projects": [
+    {
+      "name": "OpenDash",
+      "description": "Open-source analytics dashboard for small businesses",
+      "tech": ["React", "D3.js", "Express", "PostgreSQL"]
+    },
+    {
+      "name": "DevBot",
+      "description": "Slack bot that automates common developer workflow tasks",
+      "tech": ["Python", "Slack API", "Redis"]
+    }
+  ],
+  "certifications": ["AWS Solutions Architect Associate", "Google Cloud Professional Developer"]
+}
