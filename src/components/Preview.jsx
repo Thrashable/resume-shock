@@ -12,11 +12,11 @@ function generateStandaloneHTML(data, profileImage) {
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>${data.name} - Resume</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400..800&family=DM+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300..800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--accent:#00D4FF;--bg:#06060C;--card:rgba(255,255,255,0.03);--border:rgba(255,255,255,0.06)}
-body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:#e4e4e7;line-height:1.6;-webkit-font-smoothing:antialiased}
+:root{--accent:#22D3EE;--bg:#0D1117;--card:rgba(22,27,34,0.6);--border:rgba(255,255,255,0.06)}
+body{font-family:ui-sans-serif,system-ui,-apple-system,sans-serif;background:var(--bg);color:#c9d1d9;line-height:1.6;font-size:15px;-webkit-font-smoothing:antialiased}
 html:not(.dark) body{background:#F8F9FC;color:#18181b}
 html:not(.dark){--card:rgba(0,0,0,0.02);--border:rgba(0,0,0,0.08)}
 .container{max-width:64rem;margin:0 auto;padding:2rem 1rem}
@@ -27,19 +27,19 @@ html:not(.dark) .card{background:white;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
 .card:hover{transform:translateY(-3px)}
 .span2{grid-column:span 2}@media(max-width:768px){.span2{grid-column:span 1}}
 .span3{grid-column:span 3}@media(max-width:768px){.span3{grid-column:span 1}}
-h1{font-family:'Syne',sans-serif;font-size:2.5rem;font-weight:800;color:white}
+h1{font-family:'Outfit',ui-sans-serif,sans-serif;font-size:2.5rem;font-weight:800;color:white}
 html:not(.dark) h1{color:#18181b}
-h3.section{font-family:'Syne',sans-serif;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#6b7280;margin-bottom:1rem}
-.title{font-family:'Syne',sans-serif;color:var(--accent);font-weight:500;margin-top:0.5rem}
+h3.section{font-family:'Outfit',ui-sans-serif,sans-serif;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#6b7280;margin-bottom:1rem}
+.title{font-family:'Outfit',ui-sans-serif,sans-serif;color:var(--accent);font-weight:500;margin-top:0.5rem}
 .avatar{width:7rem;height:7rem;border-radius:50%;object-fit:cover;border:3px solid rgba(0,212,255,0.3)}
-.initials{width:7rem;height:7rem;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.875rem;font-family:'Syne',sans-serif;font-weight:700;color:var(--accent);background:rgba(0,212,255,0.1);border:3px solid rgba(0,212,255,0.3)}
+.initials{width:7rem;height:7rem;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.875rem;font-family:'Outfit',ui-sans-serif,sans-serif;font-weight:700;color:var(--accent);background:rgba(0,212,255,0.1);border:3px solid rgba(0,212,255,0.3)}
 .hero-content{display:flex;gap:1.25rem;align-items:flex-start}
 @media(max-width:640px){.hero-content{flex-direction:column;align-items:center;text-align:center}}
 .contact{display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:1rem}
 .pill{display:inline-flex;align-items:center;gap:0.375rem;padding:0.375rem 0.75rem;border-radius:0.5rem;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);font-size:0.75rem;color:#d1d5db;text-decoration:none}
 html:not(.dark) .pill{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,0.08);color:#4b5563}
 .pill:hover{border-color:rgba(0,212,255,0.3);color:var(--accent)}
-.skill-tag{padding:0.25rem 0.625rem;border-radius:0.375rem;background:rgba(0,212,255,0.1);color:var(--accent);font-size:0.75rem;font-family:'Space Mono',monospace;display:inline-block;margin:0.125rem}
+.skill-tag{padding:0.25rem 0.625rem;border-radius:0.375rem;background:rgba(0,212,255,0.1);color:var(--accent);font-size:0.75rem;font-family:'JetBrains Mono',ui-monospace,monospace;display:inline-block;margin:0.125rem}
 .timeline-entry{position:relative;padding-left:2rem;padding-bottom:1.5rem}
 .timeline-entry::before{content:'';position:absolute;left:11px;top:1.5rem;bottom:0;width:1px;background:linear-gradient(to bottom,rgba(0,212,255,0.3),transparent)}
 .timeline-entry:last-child::before{display:none}
@@ -48,7 +48,7 @@ html:not(.dark) .dot{background:#F8F9FC}
 .entry-role{font-weight:600;color:white;font-size:0.875rem}
 html:not(.dark) .entry-role{color:#18181b}
 .entry-company{font-size:0.75rem;color:var(--accent);font-weight:500}
-.entry-date{font-size:0.625rem;font-family:'Space Mono',monospace;color:#6b7280;margin-top:0.125rem}
+.entry-date{font-size:0.625rem;font-family:'JetBrains Mono',ui-monospace,monospace;color:#6b7280;margin-top:0.125rem}
 .entry-bullets{margin-top:0.625rem;list-style:none}
 .entry-bullets li{font-size:0.75rem;color:#9ca3af;display:flex;gap:0.5rem;margin-bottom:0.375rem;line-height:1.5}
 .entry-bullets li::before{content:'\\25B8';color:rgba(0,212,255,0.5);flex-shrink:0;margin-top:0.125rem}
@@ -57,7 +57,7 @@ html:not(.dark) .entry-role{color:#18181b}
 .edu-school{font-weight:600;color:white;font-size:0.875rem}
 html:not(.dark) .edu-school{color:#18181b}
 .edu-degree{font-size:0.75rem;color:#9ca3af}
-.edu-year{font-size:0.625rem;font-family:'Space Mono',monospace;color:#6b7280;margin-top:0.25rem}
+.edu-year{font-size:0.625rem;font-family:'JetBrains Mono',ui-monospace,monospace;color:#6b7280;margin-top:0.25rem}
 .proj-card{border-radius:0.75rem;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);padding:1rem}
 html:not(.dark) .proj-card{background:rgba(0,0,0,0.01);border-color:rgba(0,0,0,0.06)}
 .proj-name{font-weight:600;color:white;font-size:0.875rem}
@@ -65,7 +65,7 @@ html:not(.dark) .proj-name{color:#18181b}
 .proj-desc{font-size:0.75rem;color:#9ca3af;margin-top:0.375rem;line-height:1.5}
 .proj-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0.75rem}
 @media(max-width:640px){.proj-grid{grid-template-columns:1fr}}
-.stat{text-align:center}.stat-val{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:700;color:var(--accent)}
+.stat{text-align:center}.stat-val{font-family:'Outfit',ui-sans-serif,sans-serif;font-size:1.5rem;font-weight:700;color:var(--accent)}
 .stat-label{font-size:0.625rem;text-transform:uppercase;letter-spacing:0.1em;color:#6b7280;margin-top:0.25rem}
 .cert{display:flex;align-items:flex-start;gap:0.625rem;margin-bottom:0.625rem}
 .cert-icon{width:1.25rem;height:1.25rem;border-radius:50%;background:rgba(0,212,255,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:0.125rem}

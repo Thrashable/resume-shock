@@ -67,7 +67,7 @@ export default function Landing({ onDataReady }) {
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="text-center max-w-3xl mx-auto"
         >
-          <h1 className="font-display font-extrabold tracking-tight leading-none" style={{ fontSize: 'clamp(2rem, 7vw, 4.5rem)' }}>
+          <h1 className="font-display font-bold tracking-tight leading-none" style={{ fontSize: 'clamp(2rem, 7vw, 4.5rem)' }}>
             <span className="text-gray-900 dark:text-white">RESUME</span>
             <br className="sm:hidden" />
             <span className="text-accent relative">

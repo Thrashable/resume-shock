@@ -25,7 +25,7 @@ function AnimatedGauge({ score }) {
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
         <motion.span
-          className="text-3xl font-display font-bold text-gray-900 dark:text-white"
+          className="text-3xl font-display font-semibold text-gray-900 dark:text-white"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
@@ -81,7 +81,7 @@ export default function JobMatcher({ resumeData }) {
           </svg>
         </div>
         <div>
-          <h3 className="font-display font-bold text-lg text-gray-900 dark:text-white">Match My Resume</h3>
+          <h3 className="font-display font-semibold text-lg text-gray-900 dark:text-white">Match My Resume</h3>
           <p className="text-xs text-gray-400">Paste a job description to see how well your resume matches</p>
         </div>
       </div>
