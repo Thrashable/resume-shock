@@ -158,16 +158,16 @@ export default function Preview({ data, profileImage, onReset }) {
       className="min-h-[calc(100vh-3.5rem)] relative z-10"
     >
       {/* Toolbar */}
-      <div className="sticky top-14 z-40 border-b border-white/5 dark:border-white/5 bg-[#06060C]/80 dark:bg-[#06060C]/80 backdrop-blur-xl">
-        <style>{`html:not(.dark) .toolbar-bg { background: rgba(248,249,252,0.8); border-color: rgba(0,0,0,0.06); }`}</style>
-        <div className="toolbar-bg max-w-6xl mx-auto px-4 h-12 flex items-center justify-between gap-4">
-          <p className="text-xs text-gray-400 dark:text-gray-500 hidden sm:block font-mono">
+      <div className="sticky top-14 z-40 backdrop-blur-xl"
+        style={{ background: 'rgba(13,17,23,0.85)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+        <div className="max-w-6xl mx-auto px-4 h-12 flex items-center justify-between gap-4">
+          <p className="text-xs hidden sm:block font-mono" style={{ color: '#6E7681' }}>
             AI parsing gets you ~90% there
           </p>
           <div className="flex items-center gap-2 ml-auto">
             <button
               onClick={handleCopyLink}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-accent text-black text-xs font-bold hover:bg-accent-light transition-colors"
+              className="ps-btn-primary text-xs"
             >
               {copied ? (
                 <>
@@ -187,7 +187,7 @@ export default function Preview({ data, profileImage, onReset }) {
             </button>
             <button
               onClick={handleDownload}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-lg border border-white/10 dark:border-white/10 text-xs font-medium text-gray-700 dark:text-gray-300 hover:border-accent/30 hover:text-accent transition-all"
+              className="ps-btn-outline text-xs"
             >
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -196,7 +196,7 @@ export default function Preview({ data, profileImage, onReset }) {
             </button>
             <button
               onClick={handleStartOver}
-              className="px-4 py-2 rounded-lg text-xs font-medium text-gray-400 dark:text-gray-500 hover:text-white dark:hover:text-white transition-colors"
+              className="ps-btn-outline text-xs"
             >
               Start Over
             </button>
