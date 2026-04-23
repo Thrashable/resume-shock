@@ -1,64 +1,58 @@
-# RESUME SHOCK
+# degen diary
 
-Turn your boring PDF into a resume that actually gets looked at.
+Paste a Solana wallet → get a brutally honest journal of every memecoin trade
+that wallet has made. Each trade gets reconstructed, analyzed for behavioral
+patterns, and written up in first person — as if you sat down at 3am after
+your bags hit zero and tried to be honest with yourself.
 
-**Free. No signup. No data stored. 100% private.**
+No login. No backend. No data leaves your browser.
 
 ## What it does
 
-Upload your resume PDF (and optionally a profile picture), and RESUME SHOCK instantly generates a beautiful, responsive visual resume page you can share with employers via a link or download as a standalone HTML file.
+- Pulls every SPL token swap from your wallet via Helius
+- Reconstructs each position (entry, exits, peak, P&L, hold time, size %)
+- Detects red flags (topblasting, oversizing, bag-holding, paper hands,
+  panic dumps, revenge sizing, FOMO wicks) and green flags (scaled exits,
+  sane sizing, early sniping, cut losers, realized gains)
+- Generates a 2-4 sentence journal entry per trade via the Anthropic API
+- Renders it all as a hand-written notebook: cream paper, washi tape,
+  rubber stamps, margin doodles, wobbly circles around the P&L
 
-## Privacy First
+## Tabs
 
-Everything runs client-side in your browser. Your resume data **never** leaves your machine:
+- **today** — most recent trades, freshly written
+- **the ledger** — every trade, chronological
+- **patterns noticed** — flag tallies and stats
+- **hall of fame** — your top 5 wins, gold pen
+- **hall of shame** — your top 5 losses, red pen, lessons in the margin
+- **health check** — behavior score, exposure, prescription
 
-- No server, no database, no API calls
-- No localStorage, no cookies
-- Shareable links encode data in the URL hash fragment (`#`), which browsers never send to servers
-- PDF parsing happens entirely in-browser using PDF.js
-
-## Features
-
-- Client-side PDF parsing with smart section detection (experience, education, skills, projects, etc.)
-- Beautiful visual resume with timeline, skill tags, and card layouts
-- Dark/light mode toggle
-- Shareable link generation (compressed data in URL hash)
-- Download as standalone HTML file
-- Responsive design — looks great on mobile and desktop
-- Scroll animations with Framer Motion
-
-## Tech Stack
-
-- React + Tailwind CSS v4
-- Vite
-- PDF.js (`pdfjs-dist`) for client-side PDF text extraction
-- lz-string for URL-safe compression
-- Framer Motion for animations
-
-## Run Locally
+## Run
 
 ```bash
 npm install
 npm run dev
 ```
 
-## Build for Production
+Visit http://localhost:5173. Hit "just show me a demo with fake trades" to
+see it without keys.
 
-```bash
-npm run build
-```
+## Keys
 
-## Deploy
+- **Helius** — get a free key at [helius.dev](https://helius.dev). Required
+  for live wallets.
+- **Anthropic** — get a key at [console.anthropic.com](https://console.anthropic.com).
+  Optional. Without it the demo uses canned commentary.
 
-Configured for Netlify with SPA redirects. Connect the repo or deploy manually:
+Both keys live in `localStorage`. They never leave your browser.
 
-```bash
-netlify deploy --prod
-```
+## Stack
 
-## Contributing
-
-PRs welcome. Keep it client-side and privacy-first.
+- React + Vite + Tailwind v4
+- Helius Enhanced Transactions API
+- DexScreener public API
+- Anthropic Messages API (`claude-sonnet-4-5`)
+- Deployed to Netlify
 
 ## License
 

@@ -1,241 +1,207 @@
-import { useState, useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { motion } from 'framer-motion'
-import UploadZone from './UploadZone'
-import PrivacyBadge from './PrivacyBadge'
-import { extractTextFromPDF, parseResume } from '../utils/resumeParser'
-import { resizeImage } from '../utils/imageUtils'
-import sampleData from '../data/sampleResume.json'
+import { useState, useEffect, useRef } from 'react'
+import { isValidSolanaAddress, shortAddr } from '../utils/solana'
+import { getHeliusKey, setHeliusKey, getAnthropicKey, setAnthropicKey } from '../utils/storage'
+import { MOCK_WALLET } from '../data/mockTrades'
+import WashiTape from './decorations/WashiTape'
+import StickyNote from './decorations/StickyNote'
+import {
+  ArrowDoodle, StarDoodle, Squiggle, Underline, CoffeeStain,
+  WobblyCircle, SkullDoodle, Paperclip,
+} from './decorations/Doodles'
 
-export default function Landing({ onDataReady }) {
-  const navigate = useNavigate()
-  const [pdfFile, setPdfFile] = useState(null)
-  const [pdfName, setPdfName] = useState('')
-  const [profileImage, setProfileImage] = useState(null)
-  const [loading, setLoading] = useState(false)
+export default function Landing({ onSubmit, onDemo }) {
+  const [addr, setAddr] = useState('')
+  const [heliusKey, setHelius] = useState(getHeliusKey())
+  const [anthropicKey, setAnthropic] = useState(getAnthropicKey())
+  const [showKeys, setShowKeys] = useState(false)
   const [error, setError] = useState('')
+  const inputRef = useRef(null)
 
-  const handlePDF = useCallback((file) => {
-    if (file.type !== 'application/pdf') {
-      setError('Please upload a PDF file')
-      return
-    }
-    setPdfFile(file)
-    setPdfName(file.name)
-    setError('')
-  }, [])
+  useEffect(() => { inputRef.current?.focus() }, [])
 
-  const handleImage = useCallback(async (file) => {
-    if (!file.type.startsWith('image/')) {
-      setError('Please upload an image file')
-      return
-    }
-    const resized = await resizeImage(file)
-    setProfileImage(resized)
-    setError('')
-  }, [])
+  const valid = isValidSolanaAddress(addr)
 
-  const handleGenerate = useCallback(async () => {
-    if (!pdfFile) return
-    setLoading(true)
-    setError('')
-    try {
-      const lines = await extractTextFromPDF(pdfFile)
-      const resumeData = parseResume(lines)
-      onDataReady(resumeData, profileImage)
-      navigate('/preview')
-    } catch (err) {
-      setError('Failed to parse PDF. Please try a different file.')
-      console.error(err)
-    } finally {
-      setLoading(false)
-    }
-  }, [pdfFile, profileImage, onDataReady, navigate])
-
-  const handleSeeExample = useCallback(() => {
-    onDataReady(sampleData, null)
-    navigate('/preview')
-  }, [onDataReady, navigate])
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    if (!valid) { setError("that doesn't look like a solana address"); return }
+    if (!heliusKey) { setError('need a helius api key to pull your trades'); setShowKeys(true); return }
+    setHeliusKey(heliusKey)
+    if (anthropicKey) setAnthropicKey(anthropicKey)
+    onSubmit(addr.trim())
+  }
 
   return (
-    <div className="min-h-[calc(100vh-3.5rem)] flex flex-col relative z-10">
-      <div className="flex-1 flex flex-col items-center justify-center px-4 py-20">
-        {/* Hero text */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="text-center max-w-3xl mx-auto"
-        >
-          <h1 className="font-display font-bold tracking-tight leading-none" style={{ fontSize: 'clamp(2rem, 7vw, 4.5rem)' }}>
-            <span className="text-gray-900 dark:text-white">RESUME</span>
-            <br className="sm:hidden" />
-            <span className="text-accent relative">
-              SHOCK
-              <span className="absolute -inset-1 bg-accent/10 blur-2xl rounded-full -z-10" />
-            </span>
-          </h1>
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.15 }}
-            className="mt-5 text-lg sm:text-xl text-gray-600 dark:text-gray-400 max-w-xl mx-auto leading-relaxed"
-          >
-            Turn your boring PDF into a resume that actually gets looked at.
-          </motion.p>
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="mt-3 text-sm text-gray-400 dark:text-gray-500 font-mono"
-          >
-            Free &middot; No signup &middot; No data stored &middot; 100% private
-          </motion.p>
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.4, delay: 0.4 }}
-            className="mt-5"
-          >
-            <PrivacyBadge />
-          </motion.div>
-        </motion.div>
+    <div className="relative min-h-screen w-full flex flex-col items-center justify-start pt-12 pb-20 px-6 overflow-hidden">
 
-        {/* Upload zones */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="mt-14 w-full max-w-2xl grid sm:grid-cols-2 gap-4"
-        >
-          <UploadZone
-            accept=".pdf"
-            label="Resume PDF"
-            sublabel="Drag & drop or click (.pdf)"
-            icon={
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
-            }
-            onFile={handlePDF}
-            preview={pdfName ? (
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-red-500/10 flex items-center justify-center">
-                  <svg className="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                  </svg>
-                </div>
-                <span className="text-sm font-medium text-gray-900 dark:text-white truncate">{pdfName}</span>
-              </div>
-            ) : null}
-          />
-          <UploadZone
-            accept=".jpg,.jpeg,.png,.webp"
-            label="Profile Picture"
-            sublabel="Optional &middot; .jpg, .png, .webp"
-            icon={
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-              </svg>
-            }
-            onFile={handleImage}
-            preview={profileImage ? (
-              <img src={profileImage} alt="Profile" className="w-20 h-20 rounded-full object-cover ring-2 ring-accent/30" />
-            ) : null}
-          />
-        </motion.div>
-
-        {error && (
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="mt-4 text-sm text-red-400"
-          >
-            {error}
-          </motion.p>
-        )}
-
-        {/* CTA Buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.5 }}
-          className="mt-8 flex flex-col sm:flex-row items-center gap-3"
-        >
-          <button
-            onClick={handleGenerate}
-            disabled={!pdfFile || loading}
-            className={`
-              px-8 py-3.5 rounded-xl font-display font-bold text-lg transition-all duration-300
-              ${pdfFile && !loading
-                ? 'bg-accent text-black hover:bg-accent-light glow-pulse cursor-pointer'
-                : 'bg-white/10 text-gray-500 cursor-not-allowed'
-              }
-            `}
-          >
-            {loading ? (
-              <span className="flex items-center gap-2">
-                <svg className="w-5 h-5 animate-spin" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                </svg>
-                Parsing...
-              </span>
-            ) : (
-              'Generate My Resume'
-            )}
-          </button>
-          <button
-            onClick={handleSeeExample}
-            className="px-6 py-3 rounded-xl text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-white dark:hover:text-white border border-white/10 hover:border-white/20 transition-all duration-200"
-          >
-            See Example
-          </button>
-        </motion.div>
-
-        {/* Feature highlights */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.7 }}
-          className="mt-28 w-full max-w-4xl grid sm:grid-cols-3 gap-6"
-        >
-          {[
-            {
-              icon: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />,
-              title: 'Privacy First',
-              desc: 'Everything runs in your browser. Your data never touches a server.',
-            },
-            {
-              icon: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />,
-              title: 'Instant Results',
-              desc: 'Upload your PDF and get a visual resume in seconds.',
-            },
-            {
-              icon: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />,
-              title: 'Shareable',
-              desc: 'Get a link you can send to employers. No account needed.',
-            },
-          ].map((feat, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1, duration: 0.5 }}
-              className="text-center group"
-            >
-              <div className="w-12 h-12 mx-auto rounded-xl bg-accent/10 flex items-center justify-center group-hover:bg-accent/20 transition-colors duration-300">
-                <svg className="w-5 h-5 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  {feat.icon}
-                </svg>
-              </div>
-              <h3 className="mt-4 font-display font-bold text-gray-900 dark:text-white text-sm">{feat.title}</h3>
-              <p className="mt-1.5 text-xs text-gray-400 dark:text-gray-500 leading-relaxed">{feat.desc}</p>
-            </motion.div>
-          ))}
-        </motion.div>
+      {/* Coffee stain, bottom-right */}
+      <div className="pointer-events-none absolute bottom-[-40px] right-[-30px] w-[260px] opacity-80 rotate-[14deg]">
+        <CoffeeStain />
       </div>
+      <div className="pointer-events-none absolute top-[40%] left-[-60px] w-[180px] opacity-60 -rotate-[22deg]">
+        <CoffeeStain />
+      </div>
+
+      {/* Header: notebook label + washi tape */}
+      <div className="relative w-full max-w-3xl">
+        <WashiTape color="pink" className="left-[8%] top-[-2px] rotate-[-6deg]" />
+        <WashiTape color="blue" className="right-[14%] top-[6px] rotate-[4deg] !w-[130px]" />
+      </div>
+
+      {/* Cover title */}
+      <header className="relative w-full max-w-3xl mt-16 text-center">
+        <div className="absolute -top-6 right-[12%] wobble">
+          <StarDoodle className="w-12 h-12 ink-gold" />
+        </div>
+        <div className="absolute -top-2 left-[6%] -rotate-12">
+          <SkullDoodle className="w-10 h-12 ink-graphite opacity-70" />
+        </div>
+
+        <h1 className="hand-title text-[88px] md:text-[124px] leading-[0.9] ink-graphite" style={{ letterSpacing: '-0.02em' }}>
+          <span className="inline-block -rotate-1">degen</span>{' '}
+          <span className="inline-block rotate-1">diary</span>
+        </h1>
+        <div className="mx-auto mt-1 w-[320px]">
+          <Underline className="w-full h-4 ink-red" />
+        </div>
+
+        <p className="mt-6 print-hand text-[22px] ink-pencil rotate-[-0.4deg]">
+          property of:{' '}
+          <span className="typewriter ink-blue">
+            {shortAddr(MOCK_WALLET)}
+          </span>
+          <span className="ml-3 ink-red">(maybe you?)</span>
+        </p>
+      </header>
+
+      {/* Main prompt */}
+      <section className="relative mt-16 w-full max-w-2xl">
+        <div className="notebook-card paper-lined rounded-[3px] px-8 pt-10 pb-8 rotate-[-0.6deg]">
+          <WashiTape color="yellow" className="top-[-10px] left-[30%] rotate-[-3deg]" />
+
+          <div className="flex items-start gap-3 mb-6">
+            <div className="flex-1">
+              <p className="print-hand text-[15px] ink-pencil uppercase tracking-widest">entry 001</p>
+              <h2 className="hand-title text-[46px] ink-graphite mt-1 leading-none">
+                drop your wallet.
+              </h2>
+              <p className="hand-write text-[19px] ink-pencil mt-2 italic">
+                i'll write the journal for you.
+              </p>
+            </div>
+            <ArrowDoodle className="w-16 h-10 ink-blue mt-4 hidden md:block" dir="down" />
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="relative">
+              <input
+                ref={inputRef}
+                type="text"
+                value={addr}
+                onChange={(e) => { setAddr(e.target.value); setError('') }}
+                placeholder="paste solana wallet address here…"
+                className="ink-input ink-input-big"
+                spellCheck={false}
+                autoComplete="off"
+              />
+              {valid && (
+                <div className="absolute -right-2 -top-2 -rotate-6 ink-bleed">
+                  <WobblyCircle className="w-28 h-12 ink-green" />
+                  <span className="absolute inset-0 flex items-center justify-center print-hand ink-green text-[14px]">
+                    looks good
+                  </span>
+                </div>
+              )}
+            </div>
+
+            {error && (
+              <div className="rotate-[-1deg]">
+                <span className="hand-write ink-red text-[18px] italic">× {error}</span>
+              </div>
+            )}
+
+            {/* Keys accordion */}
+            <div className="border-t border-dashed border-[#A8C5E8] pt-5">
+              <button
+                type="button"
+                onClick={() => setShowKeys(s => !s)}
+                className="print-hand ink-pencil text-[15px] hover:ink-graphite"
+              >
+                {showKeys ? '▾' : '▸'} api keys
+                <span className="ml-2 ink-red italic">
+                  ({heliusKey ? '✓ helius saved' : 'need helius'}
+                  {anthropicKey ? ', ✓ anthropic saved' : ', anthropic optional'})
+                </span>
+              </button>
+              {showKeys && (
+                <div className="mt-4 space-y-4 ink-bleed">
+                  <label className="block">
+                    <span className="print-hand text-[14px] ink-pencil">helius api key</span>
+                    <span className="ml-2 hand-write text-[13px] ink-red italic">(required — get a free one at helius.dev)</span>
+                    <input
+                      type="password"
+                      value={heliusKey}
+                      onChange={(e) => setHelius(e.target.value)}
+                      placeholder="xxxx-xxxx-xxxx"
+                      className="ink-input mt-1"
+                    />
+                  </label>
+                  <label className="block">
+                    <span className="print-hand text-[14px] ink-pencil">anthropic api key</span>
+                    <span className="ml-2 hand-write text-[13px] ink-pencil italic">(optional — without it, entries use canned commentary)</span>
+                    <input
+                      type="password"
+                      value={anthropicKey}
+                      onChange={(e) => setAnthropic(e.target.value)}
+                      placeholder="sk-ant-xxxxxxxx"
+                      className="ink-input mt-1"
+                    />
+                  </label>
+                  <p className="hand-write text-[14px] ink-pencil italic leading-relaxed">
+                    both keys stay in your browser. no server. if you don't trust it, read the source.
+                  </p>
+                </div>
+              )}
+            </div>
+
+            <div className="flex items-end justify-between flex-wrap gap-4 pt-4">
+              <button type="submit" className="ink-button">
+                open the ledger →
+              </button>
+              <button
+                type="button"
+                onClick={onDemo}
+                className="print-hand ink-pencil text-[15px] underline underline-offset-4 decoration-wavy decoration-[#C23B22] hover:ink-graphite"
+              >
+                just show me a demo with fake trades
+              </button>
+            </div>
+          </form>
+
+          {/* Paperclip in top-right */}
+          <div className="absolute -right-3 top-6 -rotate-[18deg] pointer-events-none">
+            <Paperclip className="w-6 h-10" />
+          </div>
+        </div>
+
+        {/* Sticky note disclaimer */}
+        <div className="absolute -right-8 -bottom-10 hidden md:block max-w-[220px]">
+          <StickyNote rotate={5}>
+            <p className="text-[15px] leading-snug">
+              warning: this journal does <span className="highlighter">not</span> sugar-coat.
+            </p>
+            <p className="text-[13px] mt-2 italic ink-pencil">— the honest version of you</p>
+          </StickyNote>
+        </div>
+      </section>
+
+      {/* Footer scribbles */}
+      <footer className="relative mt-24 max-w-3xl w-full text-center">
+        <div className="flex items-center justify-center gap-3 opacity-70">
+          <Squiggle className="w-24 h-3 ink-pencil" />
+          <span className="print-hand ink-pencil text-[14px]">made for people who journal after getting rekt</span>
+          <Squiggle className="w-24 h-3 ink-pencil" />
+        </div>
+      </footer>
     </div>
   )
 }
