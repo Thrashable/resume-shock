@@ -1,82 +1,78 @@
 import { useState, useCallback } from 'react'
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
-import { AnimatePresence, motion } from 'framer-motion'
-import Navbar from './components/Navbar'
-import Footer from './components/Footer'
 import Landing from './components/Landing'
-import Preview from './components/Preview'
-import SharedView from './components/SharedView'
-import ParticleBackground from './components/ParticleBackground'
+import Notebook from './components/Notebook'
+import { loadWalletData } from './utils/loadWallet'
+import { getHeliusKey } from './utils/storage'
+import { getMockData } from './data/mockTrades'
+import { Squiggle, PencilCursor } from './components/decorations/Doodles'
 
-function AnimatedRoutes({ resumeData, profileImage, onDataReady, onReset }) {
-  const location = useLocation()
+export default function App() {
+  const [data, setData] = useState(null)
+  const [loading, setLoading] = useState(false)
+  const [progress, setProgress] = useState('')
+  const [error, setError] = useState('')
+  const [fromMock, setFromMock] = useState(false)
 
-  return (
-    <AnimatePresence mode="wait">
-      <Routes location={location} key={location.pathname}>
-        <Route path="/" element={
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}>
-            <Landing onDataReady={onDataReady} />
-          </motion.div>
-        } />
-        <Route path="/preview" element={
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}>
-            <Preview data={resumeData} profileImage={profileImage} onReset={onReset} />
-          </motion.div>
-        } />
-        <Route path="/view" element={
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}>
-            <SharedView />
-          </motion.div>
-        } />
-      </Routes>
-    </AnimatePresence>
-  )
-}
+  const handleSubmit = useCallback(async (wallet) => {
+    setError('')
+    setLoading(true)
+    setFromMock(false)
+    try {
+      const heliusKey = getHeliusKey()
+      const result = await loadWalletData(wallet, heliusKey, { onProgress: setProgress })
+      if (result.positions.length === 0) {
+        setError("found 0 memecoin trades on this wallet. try another wallet — or hit 'just show me a demo'.")
+      } else {
+        setData(result)
+      }
+    } catch (err) {
+      setError(err.message || 'something broke')
+    } finally {
+      setLoading(false)
+      setProgress('')
+    }
+  }, [])
 
-function AppContent() {
-  const [resumeData, setResumeData] = useState(null)
-  const [profileImage, setProfileImage] = useState(null)
-  const location = useLocation()
-
-  const handleDataReady = useCallback((data, image) => {
-    setResumeData(data)
-    setProfileImage(image)
+  const handleDemo = useCallback(() => {
+    setFromMock(true)
+    setData(getMockData())
   }, [])
 
   const handleReset = useCallback(() => {
-    setResumeData(null)
-    setProfileImage(null)
+    setData(null)
+    setError('')
+    setFromMock(false)
   }, [])
 
-  const isSharedView = location.pathname === '/view'
-
-  return (
-    <div className="min-h-screen flex flex-col relative">
-      <ParticleBackground />
-      {/* Ambient gradient orbs */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="absolute -top-40 -right-40 w-96 h-96 rounded-full bg-accent/5 blur-3xl animate-pulse" style={{ animationDuration: '8s' }} />
-        <div className="absolute -bottom-40 -left-40 w-96 h-96 rounded-full bg-accent/3 blur-3xl animate-pulse" style={{ animationDuration: '12s', animationDelay: '4s' }} />
+  if (loading) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center px-6">
+        <div className="relative">
+          <div className="absolute -left-12 -top-2 wobble">
+            <PencilCursor className="w-14 h-14" />
+          </div>
+          <h2 className="hand-title text-[48px] ink-graphite">writing your journal…</h2>
+        </div>
+        <div className="w-72 mt-3"><Squiggle className="w-full h-3 ink-blue" /></div>
+        <p className="hand-write ink-pencil text-[18px] italic mt-6">{progress || 'thinking…'}</p>
       </div>
-      <Navbar />
-      <main className="flex-1">
-        <AnimatedRoutes
-          resumeData={resumeData}
-          profileImage={profileImage}
-          onDataReady={handleDataReady}
-          onReset={handleReset}
-        />
-      </main>
-      <Footer minimal={isSharedView} />
-    </div>
-  )
-}
+    )
+  }
 
-export default function App() {
-  return (
-    <BrowserRouter>
-      <AppContent />
-    </BrowserRouter>
-  )
+  if (!data) {
+    return (
+      <>
+        <Landing onSubmit={handleSubmit} onDemo={handleDemo} />
+        {error && (
+          <div className="fixed bottom-6 left-1/2 -translate-x-1/2 max-w-[480px] px-4 py-3 rotate-[-0.5deg]"
+               style={{ background: 'rgba(194, 59, 34, 0.10)' }}>
+            <p className="hand-write ink-red text-[16px] italic">! {error}</p>
+            <button onClick={() => setError('')} className="ml-2 print-hand ink-pencil text-[13px] underline">dismiss</button>
+          </div>
+        )}
+      </>
+    )
+  }
+
+  return <Notebook data={data} onReset={handleReset} fromMock={fromMock} />
 }
