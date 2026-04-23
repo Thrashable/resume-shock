@@ -234,28 +234,37 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 22px;
+  padding: 14px 28px;
   font-family: var(--font-hand);
   font-weight: 700;
-  font-size: 22px;
-  color: #2B2B2B;
-  background: transparent;
-  border: none;
+  font-size: 26px;
+  color: #FBF7EE;
+  background: #1A3A7E;
+  border: 2px solid #1A3A7E;
+  border-radius: 4px;
+  box-shadow: 3px 3px 0 #2B2B2B;
   cursor: pointer;
-  transition: transform 0.15s ease;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  min-height: 52px;
+  -webkit-tap-highlight-color: rgba(194,59,34,0.25);
 }
 .ink-button::before {
   content: '';
   position: absolute;
   inset: -4px -10px;
-  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 60' preserveAspectRatio='none'><path d='M8 30 Q 6 10, 30 8 Q 100 2, 180 8 Q 196 12, 192 30 Q 196 50, 170 54 Q 100 60, 24 52 Q 4 48, 8 30 Z' fill='none' stroke='%231A3A7E' stroke-width='2.2' stroke-linejoin='round'/></svg>") no-repeat center / 100% 100%;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 60' preserveAspectRatio='none'><path d='M8 30 Q 6 10, 30 8 Q 100 2, 180 8 Q 196 12, 192 30 Q 196 50, 170 54 Q 100 60, 24 52 Q 4 48, 8 30 Z' fill='none' stroke='%23C23B22' stroke-width='2.4' stroke-linejoin='round'/></svg>") no-repeat center / 100% 100%;
   pointer-events: none;
+  opacity: 0.7;
 }
-.ink-button:hover { transform: rotate(-1deg) translateY(-1px); }
-.ink-button:active { transform: rotate(0.5deg) translateY(1px); }
+.ink-button:hover { transform: rotate(-1deg) translate(-1px, -1px); box-shadow: 4px 4px 0 #2B2B2B; }
+.ink-button:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 #2B2B2B; }
 
+.ink-button-red {
+  background: #C23B22;
+  border-color: #C23B22;
+}
 .ink-button-red::before {
-  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 60' preserveAspectRatio='none'><path d='M8 30 Q 6 10, 30 8 Q 100 2, 180 8 Q 196 12, 192 30 Q 196 50, 170 54 Q 100 60, 24 52 Q 4 48, 8 30 Z' fill='none' stroke='%23C23B22' stroke-width='2.2' stroke-linejoin='round'/></svg>") no-repeat center / 100% 100%;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 60' preserveAspectRatio='none'><path d='M8 30 Q 6 10, 30 8 Q 100 2, 180 8 Q 196 12, 192 30 Q 196 50, 170 54 Q 100 60, 24 52 Q 4 48, 8 30 Z' fill='none' stroke='%232B2B2B' stroke-width='2.4' stroke-linejoin='round'/></svg>") no-repeat center / 100% 100%;
 }
 
 /* ===================== Inputs ===================== */

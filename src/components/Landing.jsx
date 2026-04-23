@@ -163,16 +163,16 @@ export default function Landing({ onSubmit, onDemo }) {
               )}
             </div>
 
-            <div className="flex items-end justify-between flex-wrap gap-4 pt-4">
-              <button type="submit" className="ink-button">
+            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 pt-4">
+              <button type="submit" className="ink-button w-full sm:w-auto justify-center">
                 open the ledger →
               </button>
               <button
                 type="button"
                 onClick={onDemo}
-                className="print-hand ink-pencil text-[15px] underline underline-offset-4 decoration-wavy decoration-[#C23B22] hover:ink-graphite"
+                className="print-hand ink-pencil text-[16px] underline underline-offset-4 decoration-wavy decoration-[#C23B22] hover:ink-graphite py-2"
               >
-                just show me a demo with fake trades
+                or just show me a demo →
               </button>
             </div>
           </form>
