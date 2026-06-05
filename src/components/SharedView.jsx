@@ -40,7 +40,7 @@ export default function SharedView() {
             </svg>
           </div>
           <h2 className="text-xl font-display font-bold text-white dark:text-white">
-            This link doesn't seem to work
+            This link does not seem to work
           </h2>
           <p className="mt-2 text-sm text-gray-500 dark:text-gray-500">
             Ask the person who shared it to re-share it, or the link may have been truncated.

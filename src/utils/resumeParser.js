@@ -208,7 +208,6 @@ function parseProjects(lines) {
 }
 
 export function parseResume(lines) {
-  const sections = {}
   let currentSection = null
   let sectionLines = {}
 

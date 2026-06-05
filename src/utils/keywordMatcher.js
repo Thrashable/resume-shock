@@ -18,7 +18,7 @@ const STOP_WORDS = new Set([
 function extractKeywords(text) {
   return text
     .toLowerCase()
-    .replace(/[^a-z0-9\s\-\+\#\.]/g, ' ')
+    .replace(/[^a-z0-9\s+#.-]/g, ' ')
     .split(/\s+/)
     .filter(w => w.length > 2 && !STOP_WORDS.has(w))
 }

@@ -71,7 +71,7 @@ function StatCounter({ label, value, index }) {
   )
 }
 
-function TimelineEntry({ exp, index, isLast }) {
+function TimelineEntry({ exp, index }) {
   const [open, setOpen] = useState(index === 0)
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-30px' })
@@ -234,7 +234,7 @@ export default function VisualResume({ data, profileImage, showMatcher = false }
         <FadeIn className="mb-12" delay={0.1}>
           <h2 className="ps-heading mb-6">Professional Experience</h2>
           {experience.map((exp, i) => (
-            <TimelineEntry key={i} exp={exp} index={i} isLast={i === experience.length - 1} />
+            <TimelineEntry key={i} exp={exp} index={i} />
           ))}
         </FadeIn>
       )}
