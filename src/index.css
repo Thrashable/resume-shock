@@ -1,0 +1,194 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-accent: #00D4FF;
+  --color-accent-light: #33DDFF;
+  --color-accent-dark: #00A8CC;
+  --color-accent-glow: rgba(0, 212, 255, 0.08);
+  --color-surface: #0D1117;
+  --color-surface-raised: #161B22;
+  --color-border: rgba(0, 212, 255, 0.1);
+  --color-border-muted: rgba(255, 255, 255, 0.1);
+  --color-text: #E6EDF3;
+  --color-text-muted: #8B949E;
+  --color-text-subtle: #6E7681;
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-sans: 'IBM Plex Sans', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background: #0D1117;
+    color: #E6EDF3;
+  }
+  .dark body, body {
+    background: #0D1117;
+    color: #E6EDF3;
+  }
+  html:not(.dark) body {
+    background: #FAFBFC;
+    color: #24292f;
+  }
+}
+
+/* Card matching Patrick's exact style */
+.ps-card {
+  background: #161B22;
+  border: 1px solid rgba(0, 212, 255, 0.1);
+  border-radius: 8px;
+  padding: 24px;
+  transition: border-color 0.3s ease;
+}
+html:not(.dark) .ps-card {
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+.ps-card:hover {
+  border-color: rgba(0, 212, 255, 0.25);
+}
+
+/* Skill tag — exact Patrick style */
+.ps-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 4px;
+  background: rgba(0, 212, 255, 0.08);
+  border: 1px solid rgba(0, 212, 255, 0.2);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: #8B949E;
+  transition: all 0.2s ease;
+}
+html:not(.dark) .ps-tag {
+  background: rgba(0, 160, 200, 0.06);
+  border-color: rgba(0, 160, 200, 0.2);
+  color: #57606a;
+}
+.ps-tag:hover {
+  border-color: rgba(0, 212, 255, 0.4);
+  color: #00D4FF;
+}
+
+/* Contact pill — Patrick style */
+.ps-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 14px;
+  color: #8B949E;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+html:not(.dark) .ps-pill {
+  background: rgba(0, 0, 0, 0.03);
+  border-color: rgba(0, 0, 0, 0.1);
+  color: #57606a;
+}
+.ps-pill:hover {
+  border-color: rgba(0, 212, 255, 0.3);
+  color: #00D4FF;
+}
+
+/* Section heading — matches Patrick's h2 */
+.ps-heading {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 40px;
+  color: #E6EDF3;
+  line-height: 1.2;
+}
+html:not(.dark) .ps-heading {
+  color: #24292f;
+}
+
+/* Category label — like "CLOUD & INFRASTRUCTURE" */
+.ps-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #8B949E;
+}
+
+/* CTA button — cyan filled */
+.ps-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 4px;
+  background: #00D4FF;
+  color: #0D1117;
+  font-weight: 600;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.ps-btn-primary:hover {
+  background: #33DDFF;
+}
+
+/* CTA button — outline */
+.ps-btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 4px;
+  background: transparent;
+  color: #8B949E;
+  font-weight: 500;
+  font-size: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.ps-btn-outline:hover {
+  border-color: rgba(0, 212, 255, 0.3);
+  color: #E6EDF3;
+}
+
+/* Floating animation */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-4px); }
+}
+.float { animation: float 5s ease-in-out infinite; }
+
+/* Typing cursor blink */
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+.cursor-blink { animation: blink 0.8s step-end infinite; }
+
+/* Glow pulse for CTA */
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 16px rgba(0, 212, 255, 0.25); }
+  50% { box-shadow: 0 0 28px rgba(0, 212, 255, 0.4); }
+}
+.glow-pulse { animation: glow-pulse 2.5s ease-in-out infinite; }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .float, .glow-pulse, .cursor-blink { animation: none; }
+}
